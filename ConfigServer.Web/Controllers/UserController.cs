@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ConfigServer.Domain.Interfaces;
 using ConfigServer.Application.DTOs;
-using ConfigServer.Infrastructure.Services;
 
 namespace ConfigServer.Web.Controllers
 {
@@ -27,7 +26,8 @@ namespace ConfigServer.Web.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
-            var token = await _authService.LoginAsync(loginDto.username, loginDto.Password);
+            var (token , userId) = await _authService.LoginAsync(loginDto.username, loginDto.Password);
+            
              Response.Cookies.Append("AuthToken", token, new CookieOptions
     {
         HttpOnly = true,       
@@ -36,7 +36,7 @@ namespace ConfigServer.Web.Controllers
         Expires = DateTime.UtcNow.AddMinutes(30) 
     });
 
-    return Ok(new { message = "Login successful" });
+    return Ok(new { message = "Login successful", token, userId });
         
         }
 

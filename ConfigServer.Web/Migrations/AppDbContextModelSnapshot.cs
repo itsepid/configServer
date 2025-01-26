@@ -37,11 +37,21 @@ namespace ConfigServer.Web.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Configs");
                 });
@@ -63,6 +73,23 @@ namespace ConfigServer.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ConfigServer.Domain.Entities.Config", b =>
+                {
+                    b.HasOne("ConfigServer.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ConfigServer.Domain.Entities.User", null)
+                        .WithMany("Configs")
+                        .HasForeignKey("UserId1");
+                });
+
+            modelBuilder.Entity("ConfigServer.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Configs");
                 });
 #pragma warning restore 612, 618
         }

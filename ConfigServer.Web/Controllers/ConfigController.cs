@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ConfigServer.Domain.Entities;
+using ConfigServer.Application.DTOs;
 using ConfigServer.Domain.Interfaces;
+using ConfigServer.Infrastructure.Services;
 
 namespace ConfigServer.Web.Controllers
 {  
@@ -12,12 +14,11 @@ namespace ConfigServer.Web.Controllers
     public class ConfigController : ControllerBase
     {
         private readonly IConfigRepository _configRepository;
-        private readonly IUserContextService _userContextService;
-
-        public ConfigController(IConfigRepository configRepository)
+        private readonly TokenHelper _tokenHelper;
+        public ConfigController(IConfigRepository configRepository, TokenHelper tokenHelper)
         {
             _configRepository = configRepository;
-            _userContextService = userContextService
+            _tokenHelper = tokenHelper;
         }
 
         
@@ -42,22 +43,46 @@ namespace ConfigServer.Web.Controllers
         }
 
         
-        [HttpPost]
-        public async Task<ActionResult> CreateConfig([FromBody] Config config)
-        {
-            if (config == null || string.IsNullOrWhiteSpace(config.Value)|| string.IsNullOrWhiteSpace(config.Key))
+      [HttpPost]
+    public async Task<ActionResult> CreateConfig([FromBody] ConfigDTO configDto)
+    {
+    if (configDto == null || string.IsNullOrWhiteSpace(configDto.Value) || string.IsNullOrWhiteSpace(configDto.Key))
+    {
+        return BadRequest(new { message = "Invalid configuration data." });
+    }
+
+    try
+    {
+        // Get the userId from the cookie
+        var userId = _tokenHelper.GetUserIdFromCookie();
+
+            // Map the DTO to the Config entity
+            var config = new Config
             {
-                return BadRequest(new { message = "Invalid configuration data." });
-            }
+                Id = Guid.NewGuid(),
+                Key = configDto.Key,
+                Value = configDto.Value,
+                Description = configDto.Description,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                UserId = userId // Associate the config with the user
+            };
 
-            var userId = _userContextService.GetCurrentUserId();
-            config.AuthorId = userId;
+        // Save the config
+        await _configRepository.AddAsync(config);
+        await _configRepository.SaveChangesAsync();
 
-            await _configRepository.AddAsync(config);
-            await _configRepository.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetConfigById), new { id = config.Id }, config);
-        }
+        return CreatedAtAction(nameof(GetConfigById), new { id = config.Id }, config);
+    }
+    catch (UnauthorizedAccessException ex)
+    {
+        return Unauthorized(new { message = ex.Message });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new { message = ex.Message });
+    }
+}
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateConfig(Guid id, [FromBody] Config updatedConfig)

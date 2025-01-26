@@ -2,11 +2,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ConfigServer.Domain.Interfaces;
 using ConfigServer.Infrastructure.Data;
 using ConfigServer.Infrastructure.Repositories;
-using ConfigServer.Domain.Interfaces;
 using ConfigServer.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,12 +86,12 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<TokenHelper>();
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 
 var app = builder.Build();
