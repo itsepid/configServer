@@ -1,0 +1,128 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj": {}
+  },
+  "projects": {
+    "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj",
+        "projectName": "ConfigServer.Application",
+        "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj",
+        "packagesPath": "/Users/sepideh/.nuget/packages/",
+        "outputPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/sepideh/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj": {
+                "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj",
+        "projectName": "ConfigServer.Domain",
+        "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj",
+        "packagesPath": "/Users/sepideh/.nuget/packages/",
+        "outputPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/sepideh/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
