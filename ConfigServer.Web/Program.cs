@@ -6,11 +6,12 @@ using ConfigServer.Infrastructure.Data;
 using ConfigServer.Infrastructure.Repositories;
 using ConfigServer.Domain.Interfaces;
 using ConfigServer.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure cookie authentication
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -38,16 +39,15 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Register AppDbContext for SQL Server
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"),
     b => b.MigrationsAssembly("ConfigServer.Web"))
 );
 
-// Add controllers and other services
+
 builder.Services.AddControllers();
 
-// Add Swagger services
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -62,7 +62,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    // Configure JWT Bearer authentication for Swagger
+   
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'",
@@ -90,26 +90,29 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 
 var app = builder.Build();
 
-// Add Swagger middleware
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Config Server API v1");
-        c.RoutePrefix = ""; // Swagger UI at the app's root
+        c.RoutePrefix = ""; 
     });
 }
 
-// Add authentication and authorization middleware
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map controllers
+
 app.MapControllers();
 
 app.Run();

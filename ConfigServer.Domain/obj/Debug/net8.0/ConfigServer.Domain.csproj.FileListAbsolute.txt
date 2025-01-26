@@ -22,3 +22,15 @@ C:/Users/s.tajik/Desktop/confpro/ConfigServer.Domain/obj/Debug/net8.0/ConfigServ
 /Users/sepideh/Desktop/confserver/configServer_/ConfigServer.Domain/obj/Debug/net8.0/refint/ConfigServer.Domain.dll
 /Users/sepideh/Desktop/confserver/configServer_/ConfigServer.Domain/obj/Debug/net8.0/ConfigServer.Domain.pdb
 /Users/sepideh/Desktop/confserver/configServer_/ConfigServer.Domain/obj/Debug/net8.0/ref/ConfigServer.Domain.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\bin\Debug\net8.0\ConfigServer.Domain.deps.json
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\bin\Debug\net8.0\ConfigServer.Domain.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\bin\Debug\net8.0\ConfigServer.Domain.pdb
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ConfigServer.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ConfigServer.Domain.AssemblyInfoInputs.cache
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ConfigServer.Domain.AssemblyInfo.cs
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ConfigServer.Domain.csproj.CoreCompileInputs.cache
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ConfigServer.Domain.sourcelink.json
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ConfigServer.Domain.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\refint\ConfigServer.Domain.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ConfigServer.Domain.pdb
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Domain\obj\Debug\net8.0\ref\ConfigServer.Domain.dll

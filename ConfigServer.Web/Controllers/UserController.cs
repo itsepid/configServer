@@ -30,14 +30,16 @@ namespace ConfigServer.Web.Controllers
             var token = await _authService.LoginAsync(loginDto.username, loginDto.Password);
              Response.Cookies.Append("AuthToken", token, new CookieOptions
     {
-        HttpOnly = true,          // Prevent JavaScript access to the cookie
-        Secure = true,            // Only send the cookie over HTTPS (recommended for production)
-        SameSite = SameSiteMode.Strict, // Ensure cookies are only sent with same-site requests
-        Expires = DateTime.UtcNow.AddMinutes(30) // Set cookie expiration
+        HttpOnly = true,       
+        Secure = true,            
+        SameSite = SameSiteMode.Strict, 
+        Expires = DateTime.UtcNow.AddMinutes(30) 
     });
 
     return Ok(new { message = "Login successful" });
         
         }
+
+
     }
 }

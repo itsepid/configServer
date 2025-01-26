@@ -30,3 +30,9 @@ C:/Users/s.tajik/Desktop/confpro/ConfigServer.Infrastructure/obj/Debug/net8.0/Co
 /Users/sepideh/Desktop/confserver/configServer_/ConfigServer.Infrastructure/bin/Debug/net8.0/ConfigServer.Domain.pdb
 /Users/sepideh/Desktop/confserver/configServer_/ConfigServer.Infrastructure/obj/Debug/net8.0/ConfigSe.0625E409.Up2Date
 /Users/sepideh/Desktop/confserver/configServer_/ConfigServer.Infrastructure/obj/Debug/net8.0/ref/ConfigServer.Infrastructure.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.AssemblyInfo.cs
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.sourcelink.json
