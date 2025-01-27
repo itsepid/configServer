@@ -19,7 +19,7 @@ namespace ConfigServer.Web.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] SignupDTO signupDto)
         {
-            var token = await _authService.SignupAsync(signupDto.Username, signupDto.Password);
+            var token = await _authService.SignupAsync(signupDto.Username, signupDto.Password, signupDto.Role);
             return Ok(new AuthResponseDto { Token = token });
         }
 

@@ -44,8 +44,8 @@ namespace ConfigServer.Web.Controllers
 
         
       [HttpPost]
-    public async Task<ActionResult> CreateConfig([FromBody] ConfigDTO configDto)
-    {
+   public async Task<ActionResult> CreateConfig([FromBody] ConfigDTO configDto)
+{
     if (configDto == null || string.IsNullOrWhiteSpace(configDto.Value) || string.IsNullOrWhiteSpace(configDto.Key))
     {
         return BadRequest(new { message = "Invalid configuration data." });
@@ -53,22 +53,28 @@ namespace ConfigServer.Web.Controllers
 
     try
     {
-        // Get the userId from the cookie
-        var userId = _tokenHelper.GetUserIdFromCookie();
+        
+        var (userId, userRole) = _tokenHelper.GetUserFromCookie();
 
-            // Map the DTO to the Config entity
-            var config = new Config
-            {
-                Id = Guid.NewGuid(),
-                Key = configDto.Key,
-                Value = configDto.Value,
-                Description = configDto.Description,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                UserId = userId // Associate the config with the user
-            };
+       
+        if (userRole != "Admin" && userRole != "Editor") 
+        {
+            return Unauthorized(new { message = "You do not have permission to create configurations." });
+        }
 
-        // Save the config
+        
+        var config = new Config
+        {
+            Id = Guid.NewGuid(),
+            Key = configDto.Key,
+            Value = configDto.Value,
+            Description = configDto.Description,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            UserId = userId 
+        };
+
+        
         await _configRepository.AddAsync(config);
         await _configRepository.SaveChangesAsync();
 
@@ -83,6 +89,7 @@ namespace ConfigServer.Web.Controllers
         return BadRequest(new { message = ex.Message });
     }
 }
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateConfig(Guid id, [FromBody] Config updatedConfig)
