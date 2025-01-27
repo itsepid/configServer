@@ -7,5 +7,6 @@ namespace ConfigServer.Domain.Interfaces
     {
         string GenerateJwt(User user);
         ClaimsPrincipal ValidateJwt(string token);
+        (int UserId, string Role) GetCurrentUser(string token);
     }
 }

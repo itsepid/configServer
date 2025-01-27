@@ -18,26 +18,28 @@ public class AuthService : IAuthService
         _jwtService = jwtService;
     }
 
-    public async Task<string> SignupAsync(string username, string password)
+    public async Task<string> SignupAsync(string username, string password, string role)
     {
        
         var existingUser = await _userRepository.GetByUsernameAsync(username);
         if (existingUser != null)
             throw new Exception("User already exists.");
 
-        var user = new User(username, password);
+        var user = new User(username, password, role);
         await _userRepository.AddAsync(user);
 
         return _jwtService.GenerateJwt(user);
     }
 
-    public async Task<string> LoginAsync(string username, string password)
+    public async Task<(string Token, int UserId)> LoginAsync(string username, string password)
     {
         var user = await _userRepository.GetByUsernameAsync(username);
         if (user == null || user.Password != password) 
             throw new Exception("Invalid credentials.");
 
         
-        return _jwtService.GenerateJwt(user);
-    }
+        var token = _jwtService.GenerateJwt(user);
+
+        return (token, user.Id);
+}
 }
