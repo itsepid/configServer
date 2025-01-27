@@ -92,6 +92,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<TokenHelper>();
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
+builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
 
 var app = builder.Build();

@@ -200,6 +200,10 @@
               "target": "Package",
               "version": "[9.0.1, )"
             },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[8.3.1, )"
@@ -303,6 +307,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.2.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

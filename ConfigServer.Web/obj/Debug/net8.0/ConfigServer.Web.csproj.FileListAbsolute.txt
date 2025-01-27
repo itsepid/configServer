@@ -453,3 +453,4 @@ C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Web\obj\Debug\ne
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Web\obj\Debug\net8.0\ConfigServer.Web.pdb
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Web\obj\Debug\net8.0\ConfigServer.Web.genruntimeconfig.cache
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Web\obj\Debug\net8.0\ref\ConfigServer.Web.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Web\bin\Debug\net8.0\RabbitMQ.Client.dll

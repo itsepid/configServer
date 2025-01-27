@@ -1145,6 +1145,23 @@
           "buildTransitive/Mono.TextTemplating.targets": {}
         }
       },
+      "RabbitMQ.Client/6.2.1": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.4",
+          "System.Threading.Channels": "4.7.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/RabbitMQ.Client.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/RabbitMQ.Client.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
         "type": "package",
         "dependencies": {
@@ -1900,7 +1917,7 @@
       "System.Threading.Channels/7.0.0": {
         "type": "package",
         "compile": {
-          "lib/net7.0/_._": {
+          "lib/net7.0/System.Threading.Channels.dll": {
             "related": ".xml"
           }
         },
@@ -1975,6 +1992,7 @@
           "Microsoft.AspNetCore.Http.Abstractions": "2.3.0",
           "Microsoft.EntityFrameworkCore": "9.0.1",
           "Microsoft.Extensions.Configuration": "9.0.1",
+          "RabbitMQ.Client": "6.0.0",
           "System.IdentityModel.Tokens.Jwt": "8.3.1"
         },
         "compile": {
@@ -4215,6 +4233,25 @@
         "readme.md"
       ]
     },
+    "RabbitMQ.Client/6.2.1": {
+      "sha512": "kdcin0uz1b9xQPvlLOoa8Y2zQsfu7nRuTrcX02dCLVzwGVlsPp9AFgu1L3kRh4wSFEOGE03OVqpWKxaDlhuowQ==",
+      "type": "package",
+      "path": "rabbitmq.client/6.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "icon.png",
+        "lib/net461/RabbitMQ.Client.dll",
+        "lib/net461/RabbitMQ.Client.pdb",
+        "lib/net461/RabbitMQ.Client.xml",
+        "lib/netstandard2.0/RabbitMQ.Client.dll",
+        "lib/netstandard2.0/RabbitMQ.Client.pdb",
+        "lib/netstandard2.0/RabbitMQ.Client.xml",
+        "rabbitmq.client.6.2.1.nupkg.sha512",
+        "rabbitmq.client.nuspec"
+      ]
+    },
     "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
       "sha512": "UxWuisvZ3uVcVOLJQv7urM/JiQH+v3TmaJc1BLKl5Dxfm/nTzTUrqswCqg/INiYLi61AXnHo1M1JPmPqqLnAdg==",
       "type": "package",
@@ -5459,6 +5496,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.1",
       "Microsoft.EntityFrameworkCore.Sqlite >= 9.0.1",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.1",
+      "RabbitMQ.Client >= 6.2.1",
       "Swashbuckle.AspNetCore >= 7.2.0",
       "System.IdentityModel.Tokens.Jwt >= 8.3.1"
     ]
@@ -5545,6 +5583,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[9.0.1, )"
+          },
+          "RabbitMQ.Client": {
+            "target": "Package",
+            "version": "[6.2.1, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
