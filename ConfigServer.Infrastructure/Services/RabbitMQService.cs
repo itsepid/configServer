@@ -21,28 +21,31 @@ public class RabbitMQService : IRabbitMQService
         _port = int.TryParse(rabbitMQConfig["Port"], out var port) ? port : 5672;
     }
 
-    public void PublishMessage(string routingKey, string message)
+public void PublishMessage(string routingKey, string message)
+{
+    var factory = new ConnectionFactory()
     {
-        var factory = new ConnectionFactory()
-        {
-            HostName = _hostName,
-            UserName = _userName,
-            Password = _password,
-            Port = _port
-        };
+        HostName = _hostName,
+        UserName = _userName,
+        Password = _password,
+        Port = _port
+    };
 
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
+    using var connection = factory.CreateConnection();
+    using var channel = connection.CreateModel();
 
-        channel.ExchangeDeclare(exchange: _exchange, type: ExchangeType.Topic, durable: true);
-        var body = Encoding.UTF8.GetBytes(message);
+    channel.ExchangeDeclare(exchange: _exchange, type: ExchangeType.Topic, durable: true);
 
-        channel.BasicPublish(
-            exchange: _exchange,
-            routingKey: routingKey,
-            basicProperties: null,
-            body: body
-        );
+    var body = Encoding.UTF8.GetBytes(message);
+
+    channel.BasicPublish(
+        exchange: _exchange,
+        routingKey: routingKey,  
+        basicProperties: null,
+        body: body
+    );
+}
+
     }
 }
-}
+

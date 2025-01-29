@@ -28,6 +28,26 @@ namespace ConfigServer.Infrastructure.Repositories
             return await _dbContext.Configs.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Config>> GetByProjectAsync(string projectId)
+{
+    if (string.IsNullOrEmpty(projectId))
+    {
+        throw new ArgumentException("Project cannot be null or empty.", nameof(projectId));
+    }
+
+    
+    var configs = await _dbContext.Configs
+        .Where(c => c.ProjectId == projectId)
+        .ToListAsync();
+
+    if (configs == null)
+    {
+        throw new KeyNotFoundException($"Configuration for project '{projectId}' not found.");
+    }
+
+    return configs;
+}
+
         public async Task AddAsync(Config config)
         {
             
@@ -35,18 +55,35 @@ namespace ConfigServer.Infrastructure.Repositories
             var message = JsonSerializer.Serialize(new
         {
             ConfigId = config.Id,
+            ConfigProject = config.ProjectId,
+            ConfigFilePath = config.FilePath,
+            ConfigFileUrl = config.FileUrl,
             config.Key,
             config.Value,
             config.UpdatedAt
         });
 
-        _rabbitMQService.PublishMessage($"config.{config.Key}", message);
+        _rabbitMQService.PublishMessage($"config.{config.ProjectId}.{config.Key}", message);
         }
 
         public Task UpdateAsync(Config config)
         {
            
             _dbContext.Configs.Update(config);
+
+            var message = JsonSerializer.Serialize(new
+        {
+            ConfigId = config.Id,
+            ConfigProject = config.ProjectId,
+            ConfigFilePath = config.FilePath,
+            ConfigFileUrl = config.FileUrl,
+            config.Key,
+            config.Value,
+            config.UpdatedAt
+        });
+
+        _rabbitMQService.PublishMessage($"config.{config.ProjectId}.{config.Key}", message);
+            
             return Task.CompletedTask;
         }
 

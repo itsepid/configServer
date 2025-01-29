@@ -1,0 +1,51 @@
+input {
+  jdbc {
+    jdbc_connection_string => "jdbc:sqlserver://172.27.60.91;databaseName=MinimalDB;trustServerCertificate=true;"
+    jdbc_user => "web"
+    jdbc_password => "Pishgam@#1234"
+    jdbc_driver_class => "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+    jdbc_driver_library => "C:/Users/s.tajik/Desktop/logstash/logstash/lib/mssql-jdbc-12.8.1.jre11.jar"
+    schedule => "* * * * *"
+    statement => "
+      DECLARE @sql_last_value NUMERIC;
+      SELECT u.UserID, u.FirstName, u.LastName, u.Email, ct.SYS_CHANGE_OPERATION, ct.SYS_CHANGE_VERSION
+      FROM CHANGETABLE(CHANGES Users, @sql_last_value) AS ct
+      JOIN Users AS u ON ct.UserID = u.UserID
+    "
+    use_column_value => true
+    tracking_column => "SYS_CHANGE_VERSION"
+    tracking_column_type => "numeric"
+    record_last_run => true
+    last_run_metadata_path => "C:/Users/s.tajik/Desktop/logstash/logstash/.logstash_jdbc_last_run"
+  }
+}
+
+filter {
+  
+  if [sys_change_operation] == "I" {
+    mutate { add_field => { "action" => "index" } }
+  } else if [sys_change_operation] == "U" {
+    mutate { add_field => { "action" => "update" } }
+  } else if [sys_change_operation] == "D" {
+    mutate { add_field => { "action" => "delete" } }
+  }
+
+  
+  mutate { remove_field => ["sys_change_operation", "sys_change_version"] }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    user => "elastic"
+    password => "_vY5sQCvivF31j*_2PBD"
+    index => "user"
+    document_id => "%{userid}"
+
+  
+    action => "%{action}"
+
+    retry_on_conflict => 3
+  }
+  stdout { codec => rubydebug }
+}

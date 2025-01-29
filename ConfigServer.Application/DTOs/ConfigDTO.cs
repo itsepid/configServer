@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 namespace ConfigServer.Application.DTOs{
 public class ConfigDTO
 {
@@ -12,5 +13,10 @@ public class ConfigDTO
 
     [MaxLength(1000, ErrorMessage = "Description cannot exceed 1000 characters.")]
     public string Description { get; set; }
+
+    [Required(ErrorMessage = "Project is required.")]
+    public string ProjectId { get; set;}
+    [Required(ErrorMessage = "Filepath is required.")]
+    public IFormFile File { get; set; }
 }
 }

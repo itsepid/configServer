@@ -15,6 +15,7 @@ namespace ConfigServer.Web.Controllers
     {
         private readonly IConfigRepository _configRepository;
         private readonly TokenHelper _tokenHelper;
+        
         public ConfigController(IConfigRepository configRepository, TokenHelper tokenHelper)
         {
             _configRepository = configRepository;
@@ -30,10 +31,21 @@ namespace ConfigServer.Web.Controllers
         }
 
        
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Config>> GetConfigById(Guid id)
+        // [HttpGet("{id}")]
+        // public async Task<ActionResult<Config>> GetConfigById(Guid id)
+        // {
+        //     var config = await _configRepository.GetByIdAsync(id);
+        //     if (config == null)
+        //     {
+        //         return NotFound(new { message = "Configuration not found." });
+        //     }
+
+        //     return Ok(config);
+        //}
+        [HttpGet("{Project}")]
+        public async Task<ActionResult<Config>> GetConfigByProject(string Project)
         {
-            var config = await _configRepository.GetByIdAsync(id);
+            var config = await _configRepository.GetByProjectAsync(Project);
             if (config == null)
             {
                 return NotFound(new { message = "Configuration not found." });
@@ -42,43 +54,105 @@ namespace ConfigServer.Web.Controllers
             return Ok(config);
         }
 
-        
-      [HttpPost]
-   public async Task<ActionResult> CreateConfig([FromBody] ConfigDTO configDto)
+        // [HttpPost]
+        // public async Task<ActionResult> CreateConfig([FromForm] ConfigDTO configDto, [FromForm] IFormFile configFile)
+        // {
+        //     if (configFile == null || configFile.Length == 0)
+        //     {
+        //         return BadRequest(new { message = "No file uploaded." });
+        //     }
+
+        //     // Save the file to the server and get the file path
+        //     string filePath = await _configFileService.SaveConfigFile(configFile, configDto.ProjectId);
+
+        //     // Create the config entity with the file path
+        //     var config = new Config
+        //     {
+        //         Id = Guid.NewGuid(),
+        //         ProjectId = configDto.ProjectId,
+        //         FilePath = filePath,
+        //         UpdatedAt = DateTime.UtcNow
+        //     };
+
+        //     // Save the config entity to the database
+        //     await _configRepository.AddAsync(config);
+        //     await _configRepository.SaveChangesAsync();
+
+        //     return Ok(config);
+        // }
+
+    
+
+[HttpPost]
+public async Task<ActionResult> CreateConfig([FromForm] ConfigDTO configDto)
 {
-    if (configDto == null || string.IsNullOrWhiteSpace(configDto.Value) || string.IsNullOrWhiteSpace(configDto.Key))
+    
+    if (configDto == null || string.IsNullOrWhiteSpace(configDto.Key))
     {
-        return BadRequest(new { message = "Invalid configuration data." });
+        return BadRequest(new { message = "Key is required." });
+    }
+
+    
+    if (string.IsNullOrWhiteSpace(configDto.Value) && (configDto.File == null || configDto.File.Length == 0))
+    {
+        return BadRequest(new { message = "Provide either Value or a File." });
     }
 
     try
     {
         
         var (userId, userRole) = _tokenHelper.GetUserFromCookie();
-
-       
-        if (userRole != "Admin" && userRole != "Editor") 
+        if (userRole != "Admin" && userRole != "Editor")
         {
             return Unauthorized(new { message = "You do not have permission to create configurations." });
         }
 
         
+        string filePath = null;
+        string fileUrl = null;
+        if (configDto.File != null && configDto.File.Length > 0)
+        {
+            
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(configDto.File.FileName)}";
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+
+            
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+          
+            filePath = Path.Combine(uploadsFolder, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await configDto.File.CopyToAsync(stream);
+            }
+
+            var baseUrl = $"{Request.Scheme}://{Request.Host}"; 
+            fileUrl = $"{baseUrl}/uploads/{fileName}";
+
+        }
+
         var config = new Config
         {
             Id = Guid.NewGuid(),
             Key = configDto.Key,
             Value = configDto.Value,
             Description = configDto.Description,
+            ProjectId = configDto.ProjectId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            UserId = userId 
+            UserId = userId,
+            FilePath = filePath,
+            FileUrl = fileUrl 
         };
 
         
         await _configRepository.AddAsync(config);
         await _configRepository.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetConfigById), new { id = config.Id }, config);
+        return Ok(config);
     }
     catch (UnauthorizedAccessException ex)
     {
@@ -86,14 +160,20 @@ namespace ConfigServer.Web.Controllers
     }
     catch (Exception ex)
     {
-        return BadRequest(new { message = ex.Message });
+        
+        return BadRequest(new { message = "An error occurred while saving the configuration." });
     }
 }
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateConfig(Guid id, [FromBody] Config updatedConfig)
+        public async Task<ActionResult> UpdateConfig(Guid id, [FromBody] UpdateConfigDTO updatedConfig)
         {
+        var (userId, userRole) = _tokenHelper.GetUserFromCookie();
+        if (userRole != "Admin" && userRole != "Editor")
+        {
+            return Unauthorized(new { message = "You do not have permission to update configurations." });
+        }
             var existingConfig = await _configRepository.GetByIdAsync(id);
             if (existingConfig == null)
             {

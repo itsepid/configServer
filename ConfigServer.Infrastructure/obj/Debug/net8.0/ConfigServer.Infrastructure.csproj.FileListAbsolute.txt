@@ -46,3 +46,5 @@ C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\o
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\refint\ConfigServer.Infrastructure.dll
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.pdb
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ref\ConfigServer.Infrastructure.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\bin\Debug\net8.0\ConfigServer.Application.dll
+C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\bin\Debug\net8.0\ConfigServer.Application.pdb
