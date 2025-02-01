@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 using ConfigServer.Application.DTOs;
 
 namespace ConfigServer.Web.Controllers

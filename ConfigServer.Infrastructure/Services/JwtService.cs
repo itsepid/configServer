@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using ConfigServer.Domain.Entities;
 using Microsoft.Extensions.Configuration;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 
 namespace ConfigServer.Infrastructure.Services
 {

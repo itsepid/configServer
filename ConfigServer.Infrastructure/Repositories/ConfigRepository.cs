@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using ConfigServer.Domain.Entities;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 using ConfigServer.Infrastructure.Data;
 
 
@@ -52,18 +52,6 @@ namespace ConfigServer.Infrastructure.Repositories
         {
             
             await _dbContext.Configs.AddAsync(config);
-            var message = JsonSerializer.Serialize(new
-        {
-            ConfigId = config.Id,
-            ConfigProject = config.ProjectId,
-            ConfigFilePath = config.FilePath,
-            ConfigFileUrl = config.FileUrl,
-            config.Key,
-            config.Value,
-            config.UpdatedAt
-        });
-
-        _rabbitMQService.PublishMessage($"config.{config.ProjectId}.{config.Key}", message);
         }
 
         public Task UpdateAsync(Config config)

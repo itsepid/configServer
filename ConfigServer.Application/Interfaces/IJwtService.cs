@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using ConfigServer.Domain.Entities;
 
-namespace ConfigServer.Domain.Interfaces
+namespace ConfigServer.Application.Interfaces
 {
     public interface IJwtService
     {

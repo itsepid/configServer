@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ConfigServer.Domain.Entities;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 using ConfigServer.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

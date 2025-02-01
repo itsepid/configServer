@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ConfigServer.Domain.Entities;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using ConfigServer.Infrastructure.Data;
 

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using ConfigServer.Domain.Entities;
-namespace ConfigServer.Domain.Interfaces
+namespace ConfigServer.Application.Interfaces
 {
 public interface IUserRepository
 {

@@ -1,4 +1,4 @@
-namespace ConfigServer.Domain.Interfaces
+namespace ConfigServer.Application.Interfaces
 {
     using ConfigServer.Domain.Entities;
 

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using System;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 namespace ConfigServer.Infrastructure.Services
 {
 public class TokenHelper

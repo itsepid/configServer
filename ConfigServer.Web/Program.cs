@@ -2,17 +2,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 using ConfigServer.Infrastructure.Data;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using ConfigServer.Infrastructure.Repositories;
 using Microsoft.Extensions.FileProviders;
+using ConfigServer.Infrastructure.Repositories;
 using ConfigServer.Infrastructure.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 // Add authentication services
 builder.Services.AddAuthentication(options =>
@@ -30,7 +27,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = true;
+    options.RequireHttpsMetadata = false;  // Set to true in production
     options.SaveToken = true;
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
@@ -38,7 +35,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidIssuer = "configServer",
         ValidAudience = "ConfigServerAPI",
-        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKeyHere12345678987654321Sepideh"))
+        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes("Your32CharacterSecretKeyHere123"))
     };
 });
 
@@ -48,28 +46,30 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     b => b.MigrationsAssembly("ConfigServer.Web"))
 );
 
-// Add MVC services
-builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
-// Add Swagger services
+// Add services
+builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Config Server API",
         Version = "v1",
-        Description = "API documentation for Config Server",
-        Contact = new OpenApiContact
-        {
-            Name = "Your Name",
-            Email = "your.email@example.com",
-        }
     });
 
-    // JWT Bearer Security Definition for Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: 'Authorization: Bearer {token}'",
+        Description = "JWT Authorization header using the Bearer scheme",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -81,18 +81,11 @@ builder.Services.AddSwaggerGen(c =>
         {
             new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
             },
             Array.Empty<string>()
         }
     });
-
-    // Add custom Operation Filter to handle file uploads
-
 });
 
 // Add services to DI container
@@ -101,43 +94,36 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<TokenHelper>();
-//builder.Services.AddScoped<IFileService, FileService>();
-//builder.Services.AddScoped<IConfigService, ConfigService>();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IConfigService, ConfigService>();
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
     RequestPath = "/uploads"
 });
 
-// Configure the HTTP request pipeline
+// CORS must be applied before authentication
+app.UseCors("AllowReactApp");
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Config Server API v1");
-        c.RoutePrefix = ""; // Set Swagger UI at the root
+        c.RoutePrefix = "";
     });
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-// Map controllers
 app.MapControllers();
-
 app.Run();
-
-
-
-
-
-
-
-

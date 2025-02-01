@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ConfigServer.Domain.Entities;
 using ConfigServer.Application.DTOs;
-using ConfigServer.Domain.Interfaces;
+using ConfigServer.Application.Interfaces;
 using ConfigServer.Infrastructure.Services;
 
 namespace ConfigServer.Web.Controllers
@@ -15,11 +15,13 @@ namespace ConfigServer.Web.Controllers
     {
         private readonly IConfigRepository _configRepository;
         private readonly TokenHelper _tokenHelper;
+        private readonly IConfigService _configService;
         
-        public ConfigController(IConfigRepository configRepository, TokenHelper tokenHelper)
+        public ConfigController(IConfigRepository configRepository, TokenHelper tokenHelper, IConfigService configService)
         {
             _configRepository = configRepository;
             _tokenHelper = tokenHelper;
+            _configService = configService;
         }
 
         
@@ -83,76 +85,59 @@ namespace ConfigServer.Web.Controllers
 
     
 
-[HttpPost]
-public async Task<ActionResult> CreateConfig([FromForm] ConfigDTO configDto)
-{
-    
-    if (configDto == null || string.IsNullOrWhiteSpace(configDto.Key))
+    [HttpPost]
+    public async Task<ActionResult> CreateConfig([FromForm] ConfigDTO configDto)
     {
-        return BadRequest(new { message = "Key is required." });
+        // Input validation
+        if (configDto == null || string.IsNullOrWhiteSpace(configDto.Key))
+        {
+            return BadRequest(new { message = "Key is required." });
+        }
+
+        if (string.IsNullOrWhiteSpace(configDto.Value) && 
+            (configDto.File == null || configDto.File.Length == 0))
+        {
+            return BadRequest(new { message = "Provide either Value or a File." });
+        }
+
+        try
+        {
+           
+            var (userId, userRole) = _tokenHelper.GetUserFromCookie();
+
+            // Call service to create the config
+            var config = await _configService.CreateConfigAsync(configDto, userId, userRole);
+
+            return Ok(config);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = $"An error occurred: {ex.Message}" });
+        }
     }
 
-    
-    if (string.IsNullOrWhiteSpace(configDto.Value) && (configDto.File == null || configDto.File.Length == 0))
+
+[HttpPut("{id}")]
+public async Task<ActionResult> UpdateConfig(Guid id, [FromForm] UpdateConfigDTO updatedConfig)
+{
+    var (userId, userRole) = _tokenHelper.GetUserFromCookie();
+    if (userRole != "Admin" && userRole != "Editor")
     {
-        return BadRequest(new { message = "Provide either Value or a File." });
+        return Unauthorized(new { message = "You do not have permission to update configurations." });
     }
 
     try
     {
-        
-        var (userId, userRole) = _tokenHelper.GetUserFromCookie();
-        if (userRole != "Admin" && userRole != "Editor")
-        {
-            return Unauthorized(new { message = "You do not have permission to create configurations." });
-        }
-
-        
-        string filePath = null;
-        string fileUrl = null;
-        if (configDto.File != null && configDto.File.Length > 0)
-        {
-            
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(configDto.File.FileName)}";
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
-
-            
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
-
-          
-            filePath = Path.Combine(uploadsFolder, fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await configDto.File.CopyToAsync(stream);
-            }
-
-            var baseUrl = $"{Request.Scheme}://{Request.Host}"; 
-            fileUrl = $"{baseUrl}/uploads/{fileName}";
-
-        }
-
-        var config = new Config
-        {
-            Id = Guid.NewGuid(),
-            Key = configDto.Key,
-            Value = configDto.Value,
-            Description = configDto.Description,
-            ProjectId = configDto.ProjectId,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-            UserId = userId,
-            FilePath = filePath,
-            FileUrl = fileUrl 
-        };
-
-        
-        await _configRepository.AddAsync(config);
-        await _configRepository.SaveChangesAsync();
-
-        return Ok(config);
+        await _configService.UpdateConfigAsync(id, updatedConfig);
+        return NoContent();
+    }
+    catch (ArgumentException ex)
+    {
+        return NotFound(new { message = ex.Message });
     }
     catch (UnauthorizedAccessException ex)
     {
@@ -160,35 +145,8 @@ public async Task<ActionResult> CreateConfig([FromForm] ConfigDTO configDto)
     }
     catch (Exception ex)
     {
-        
-        return BadRequest(new { message = "An error occurred while saving the configuration." });
+        return BadRequest(new { message = $"An error occurred: {ex.Message}" });
     }
 }
-
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateConfig(Guid id, [FromBody] UpdateConfigDTO updatedConfig)
-        {
-        var (userId, userRole) = _tokenHelper.GetUserFromCookie();
-        if (userRole != "Admin" && userRole != "Editor")
-        {
-            return Unauthorized(new { message = "You do not have permission to update configurations." });
-        }
-            var existingConfig = await _configRepository.GetByIdAsync(id);
-            if (existingConfig == null)
-            {
-                return NotFound(new { message = "Configuration not found." });
-            }
-
-            existingConfig.Key = updatedConfig.Key;
-            existingConfig.Value = updatedConfig.Value;
-            existingConfig.Description = updatedConfig.Description;
-            existingConfig.UpdatedAt = DateTime.UtcNow;
-
-            await _configRepository.UpdateAsync(existingConfig);
-            await _configRepository.SaveChangesAsync();
-
-            return NoContent();
-        }
     }
 }

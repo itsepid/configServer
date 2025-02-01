@@ -14,7 +14,6 @@ public class UpdateConfigDTO
     [MaxLength(1000, ErrorMessage = "Description cannot exceed 1000 characters.")]
     public string Description { get; set; }
 
-    [Required(ErrorMessage = "File is required.")]
     public IFormFile File { get; set; }
 }
 }

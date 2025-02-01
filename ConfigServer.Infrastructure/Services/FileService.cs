@@ -1,28 +1,59 @@
+using ConfigServer.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ConfigServer.Infrastructure.Services
 {
-
-public class FileService
-{
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public FileService(IHttpContextAccessor httpContextAccessor)
+    public class FileService : IFileService
     {
-        _httpContextAccessor = httpContextAccessor;
-    }
+        private readonly string _uploadsFolder;
 
-    public string GenerateFileUrl(string fileName)
-    {
-        var request = _httpContextAccessor.HttpContext?.Request;
-        if (request == null)
+        public FileService()
         {
-            throw new InvalidOperationException("Request context is unavailable.");
+            _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+
+            // Ensure the uploads directory exists
+            if (!Directory.Exists(_uploadsFolder))
+            {
+                Directory.CreateDirectory(_uploadsFolder);
+            }
+        }
+        public async Task<(string filePath, string fileUrl)> UploadFileAsync(IFormFile file, HttpRequest request)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("File cannot be null or empty.");
+            }
+
+            // Generate unique file name
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            string filePath = Path.Combine(_uploadsFolder, fileName);
+
+            // Save the file
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Construct base URL from the request
+            string baseUrl = $"{request.Scheme}://{request.Host}";
+            string fileUrl = $"{baseUrl}/uploads/{fileName}";
+
+            return (filePath, fileUrl);
         }
 
-        // Construct the base URL for the file (using scheme + host from request)
-        var baseUrl = $"{request.Scheme}://{request.Host}"; 
-        return $"{baseUrl}/uploads/{fileName}";
+        /// <summary>
+        /// Deletes a file from the uploads folder.
+        /// </summary>
+        /// <param name="filePath">The path of the file to delete.</param>
+        public void DeleteFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
     }
-}
 }

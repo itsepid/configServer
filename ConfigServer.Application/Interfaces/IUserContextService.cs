@@ -1,4 +1,4 @@
-namespace ConfigServer.Domain.Interfaces
+namespace ConfigServer.Application.Interfaces
 {
     public interface IUserContextService
     {
