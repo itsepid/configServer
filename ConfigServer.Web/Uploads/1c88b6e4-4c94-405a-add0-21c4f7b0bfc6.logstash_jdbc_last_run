@@ -1,0 +1,68 @@
+input {
+  jdbc {
+    jdbc_driver_library => "/usr/share/logstash/sqljdbc_12.4/enu/jars/mssql-jdbc-12.4.2.jre8.jar"
+    jdbc_driver_class => "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+    jdbc_connection_string => "jdbc:sqlserver://94.182.95.169:9125;user=sa;password=Qwer@#1234;databaseName=KhabarAzMa;encrypt=true;trustServerCertificate=true"
+    jdbc_user => "sa"
+    jdbc_password => "Qwer@#1234"
+    jdbc_paging_mode => "auto"
+    jdbc_paging_enabled => true
+    jdbc_page_size => 5000
+    jdbc_fetch_size => 500
+    last_run_metadata_path => "/usr/share/logstash/.logstash_jdbc_last_run"
+    tracking_column => "SYS_CHANGE_VERSION"
+    use_column_value => true
+    tracking_column_type => "numeric"
+    schedule => "* * * * *"
+    statement => "
+    SELECT 
+    CT.SYS_CHANGE_OPERATION AS ChangeOperation,
+    CT.SYS_CHANGE_VERSION AS ChangeVersion,
+    CT.id AS ChangeID,
+    N.id AS NewsID,
+    N.*  -- Select all columns from the News table
+  FROM 
+    CHANGETABLE(CHANGES News, NULL) AS CT
+  JOIN 
+    News N ON CT.id = N.id;
+    "
+   
+  }
+}
+
+filter {
+  # Check for Insert or Update operations based on SYS_CHANGE_OPERATION
+  if [SYS_CHANGE_OPERATION] == "I" or [SYS_CHANGE_OPERATION] == "U" {
+    mutate {
+        add_field => { "action" => "index" }
+    }
+  } else {
+    mutate {
+        add_field => { "action" => "update" }
+    }
+  }
+
+  mutate {
+    split => { "keywords" => "," }
+  }
+
+  json {
+    source => "attachments"
+    target => "attachments_parsed"
+  }
+}
+
+
+# Use this configuration to pass environment variables for credentials
+output {
+  elasticsearch {
+    hosts => "${ELASTICSEARCH_HOST}"
+    user => "elastic"
+    password => "${LOGSTASH_INTERNAL_PASSWORD}"
+    ssl => true
+    cacert => "config/ca.crt"
+    index => "khabar-news-refined"
+    document_id => "%{id}"  # Use document_id for updates
+  }
+}
+

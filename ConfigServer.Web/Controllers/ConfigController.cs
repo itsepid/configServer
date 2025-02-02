@@ -125,14 +125,14 @@ namespace ConfigServer.Web.Controllers
 public async Task<ActionResult> UpdateConfig(Guid id, [FromForm] UpdateConfigDTO updatedConfig)
 {
     var (userId, userRole) = _tokenHelper.GetUserFromCookie();
-    if (userRole != "Admin" && userRole != "Editor")
-    {
-        return Unauthorized(new { message = "You do not have permission to update configurations." });
-    }
+
+     Console.WriteLine($"Updating config with ID: {id}");
+    Console.WriteLine($"Key: {updatedConfig.Key}, Value: {updatedConfig.Value}, Description: {updatedConfig.Description}");
+    Console.WriteLine($"File provided: {updatedConfig.File != null}");
 
     try
     {
-        await _configService.UpdateConfigAsync(id, updatedConfig);
+        await _configService.UpdateConfigAsync(id, updatedConfig, userRole);
         return NoContent();
     }
     catch (ArgumentException ex)
@@ -148,5 +148,30 @@ public async Task<ActionResult> UpdateConfig(Guid id, [FromForm] UpdateConfigDTO
         return BadRequest(new { message = $"An error occurred: {ex.Message}" });
     }
 }
+
+[HttpDelete("{id}")]
+
+public async Task<ActionResult> DeleteConfig(Guid id)
+{
+     var (userId, userRole) = _tokenHelper.GetUserFromCookie();
+    try
+    {
+        await _configService.DeleteConfigAsync(id, userRole);
+        return Ok(new { message = "config deleted" });    
+    }
+        catch (ArgumentException ex)
+    {
+        return NotFound(new { message = ex.Message });
+    }
+    catch (UnauthorizedAccessException ex)
+    {
+        return Unauthorized(new { message = ex.Message });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new { message = $"An error occurred: {ex.Message}" });
+    }
+}
+
     }
 }

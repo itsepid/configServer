@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ConfigServer.Application\ConfigServer.Application.csproj" />
     <ProjectReference Include="..\ConfigServer.Infrastructure\ConfigServer.Infrastructure.csproj" />
+    <ProjectReference Include="..\ConfigServer.Domain\ConfigServer.Domain.csproj" />
   </ItemGroup>
 
 </Project>
