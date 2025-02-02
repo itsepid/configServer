@@ -10,6 +10,7 @@
         "dependencies": {
           "ConfigServer.Application": "1.0.0",
           "ConfigServer.Domain": "1.0.0",
+          "Microsoft.AspNetCore.Http": "2.3.0",
           "Microsoft.AspNetCore.Http.Abstractions": "2.3.0",
           "Microsoft.AspNetCore.Mvc": "2.3.0",
           "Microsoft.EntityFrameworkCore": "9.0.1",

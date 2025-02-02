@@ -1,33 +1,39 @@
 {
   "format": 1,
   "restore": {
-    "/Users/sepideh/Desktop/configServer/ConfigServer.Infrastructure/ConfigServer.Infrastructure.csproj": {}
+    "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Infrastructure\\ConfigServer.Infrastructure.csproj": {}
   },
   "projects": {
-    "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj": {
+    "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Application\\ConfigServer.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj",
+        "projectUniqueName": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Application\\ConfigServer.Application.csproj",
         "projectName": "ConfigServer.Application",
-        "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj",
-        "packagesPath": "/Users/sepideh/.nuget/packages/",
-        "outputPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Application/obj/",
+        "projectPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Application\\ConfigServer.Application.csproj",
+        "packagesPath": "C:\\Users\\s.tajik\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/sepideh/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\s.tajik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj": {
-                "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj"
+              "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\ConfigServer.Domain.csproj": {
+                "projectPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\ConfigServer.Domain.csproj"
               }
             }
           }
@@ -41,7 +47,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -68,26 +75,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj": {
+    "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\ConfigServer.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\ConfigServer.Domain.csproj",
         "projectName": "ConfigServer.Domain",
-        "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj",
-        "packagesPath": "/Users/sepideh/.nuget/packages/",
-        "outputPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/obj/",
+        "projectPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\ConfigServer.Domain.csproj",
+        "packagesPath": "C:\\Users\\s.tajik\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/sepideh/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\s.tajik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -105,7 +118,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -132,37 +146,43 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/sepideh/Desktop/configServer/ConfigServer.Infrastructure/ConfigServer.Infrastructure.csproj": {
+    "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Infrastructure\\ConfigServer.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/sepideh/Desktop/configServer/ConfigServer.Infrastructure/ConfigServer.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Infrastructure\\ConfigServer.Infrastructure.csproj",
         "projectName": "ConfigServer.Infrastructure",
-        "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Infrastructure/ConfigServer.Infrastructure.csproj",
-        "packagesPath": "/Users/sepideh/.nuget/packages/",
-        "outputPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Infrastructure/obj/",
+        "projectPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Infrastructure\\ConfigServer.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\s.tajik\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/sepideh/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\s.tajik\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj": {
-                "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Application/ConfigServer.Application.csproj"
+              "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Application\\ConfigServer.Application.csproj": {
+                "projectPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Application\\ConfigServer.Application.csproj"
               },
-              "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj": {
-                "projectPath": "/Users/sepideh/Desktop/configServer/ConfigServer.Domain/ConfigServer.Domain.csproj"
+              "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\ConfigServer.Domain.csproj": {
+                "projectPath": "C:\\Users\\s.tajik\\Desktop\\configServer\\configServer\\ConfigServer.Domain\\ConfigServer.Domain.csproj"
               }
             }
           }
@@ -176,12 +196,17 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
               "version": "[2.3.0, )"
@@ -223,7 +248,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

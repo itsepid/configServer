@@ -11,6 +11,7 @@ namespace ConfigServer.Application.Interfaces
         Task<IEnumerable<Config>> GetByProjectAsync(string project);
         Task AddAsync (Config config);
         Task UpdateAsync (Config config);
+        Task DeleteAsync(Guid id);
         Task SaveChangesAsync();
 
     }

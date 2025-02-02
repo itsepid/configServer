@@ -10,12 +10,11 @@ namespace ConfigServer.Infrastructure.Repositories
     public class ConfigRepository : IConfigRepository
     {
         private readonly AppDbContext _dbContext;
-        private readonly IRabbitMQService _rabbitMQService;
 
-        public ConfigRepository(AppDbContext dbContext,  IRabbitMQService rabbitMQService)
+
+        public ConfigRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            _rabbitMQService = rabbitMQService;
         }
 
         public async Task<IEnumerable<Config>> GetAllAsync()
@@ -26,6 +25,18 @@ namespace ConfigServer.Infrastructure.Repositories
         public async Task<Config> GetByIdAsync(Guid id)
         {
             return await _dbContext.Configs.FindAsync(id);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            Config config = await GetByIdAsync(id);
+             if (config == null)
+                {
+                    throw new KeyNotFoundException($"Config with ID {id} not found.");
+                }
+        
+          _dbContext.Configs.Remove(config);
+
         }
 
         public async Task<IEnumerable<Config>> GetByProjectAsync(string projectId)
@@ -70,7 +81,6 @@ namespace ConfigServer.Infrastructure.Repositories
             config.UpdatedAt
         });
 
-        _rabbitMQService.PublishMessage($"config.{config.ProjectId}.{config.Key}", message);
             
             return Task.CompletedTask;
         }
