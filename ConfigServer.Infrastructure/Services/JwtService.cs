@@ -20,19 +20,19 @@ namespace ConfigServer.Infrastructure.Services
 
         public string GenerateJwt(User user)
         {
-            // Define claims with custom claim type for role
+           
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, user.Username), // Standard claim type for username
-                new Claim("userId", user.Id.ToString()),   // Custom claim type for userId
-                new Claim(ClaimTypes.Role, user.Roles.ToString())    // Custom claim type for role
+                new Claim(ClaimTypes.Name, user.Username), 
+                new Claim("userId", user.Id.ToString()),   
+                new Claim(ClaimTypes.Role, user.Roles.ToString())   
             };
 
-            // Create signing credentials
+            
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // Create the JWT token
+            
             var token = new JwtSecurityToken(
                 issuer: "configserver",
                 audience: "configserverAPI",
@@ -41,7 +41,7 @@ namespace ConfigServer.Infrastructure.Services
                 signingCredentials: creds
             );
 
-            // Return the token as a string
+           
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 

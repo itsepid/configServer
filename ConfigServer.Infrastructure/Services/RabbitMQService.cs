@@ -1,4 +1,5 @@
 using RabbitMQ.Client;
+using System.Text.Json;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 
@@ -45,6 +46,41 @@ public void PublishMessage(string routingKey, string message)
         body: body
     );
 }
+
+public async Task PublishConfigUpdateAsync(string projectName, Dictionary<string, string> newConfig)
+{
+    var routingKey = $"config.{projectName}";
+
+    var message = JsonSerializer.Serialize(newConfig);
+    var body = Encoding.UTF8.GetBytes(message);
+
+    var factory = new ConnectionFactory()
+    {
+        HostName = _hostName,
+        UserName = _userName,
+        Password = _password,
+        Port = _port
+    };
+
+    using var connection = factory.CreateConnection();
+    using var channel = connection.CreateModel();
+    var exchangeName = "config_updates";
+    channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Topic, durable: true);
+
+     // Ensure this exchange exists in RabbitMQ
+
+    channel.BasicPublish(
+        exchange: exchangeName,
+        routingKey: routingKey,
+        basicProperties: null,
+        body: body
+    );
+
+Console.WriteLine($"The message is: {Encoding.UTF8.GetString(body)}");
+
+    await Task.CompletedTask; // RabbitMQ publish is synchronous, but keeping async for interface compatibility
+}
+
 
     }
 }

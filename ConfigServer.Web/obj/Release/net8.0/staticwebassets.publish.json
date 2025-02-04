@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "yYiVdjZN/A/WoO4QE6t07Hp3QoMphMfjMQOeZZ4ir54=",
+  "Source": "ConfigServer.Web",
+  "BasePath": "_content/ConfigServer.Web",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

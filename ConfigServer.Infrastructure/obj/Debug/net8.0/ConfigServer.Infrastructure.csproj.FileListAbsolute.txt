@@ -40,7 +40,6 @@ C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/o
 C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/obj/Debug/net8.0/ConfigServer.Infrastructure.AssemblyInfoInputs.cache
 C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/obj/Debug/net8.0/ConfigServer.Infrastructure.AssemblyInfo.cs
 C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/obj/Debug/net8.0/ConfigServer.Infrastructure.csproj.CoreCompileInputs.cache
-C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/obj/Debug/net8.0/ConfigServer.Infrastructure.sourcelink.json
 C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/obj/Debug/net8.0/ConfigSe.0625E409.Up2Date
 C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/obj/Debug/net8.0/ConfigServer.Infrastructure.dll
 C:/Users/s.tajik/Desktop/configServer/configServer/ConfigServer.Infrastructure/obj/Debug/net8.0/refint/ConfigServer.Infrastructure.dll
@@ -78,7 +77,6 @@ C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\o
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.AssemblyInfoInputs.cache
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.AssemblyInfo.cs
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.sourcelink.json
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigSe.0625E409.Up2Date
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\ConfigServer.Infrastructure.dll
 C:\Users\s.tajik\Desktop\configServer\configServer\ConfigServer.Infrastructure\obj\Debug\net8.0\refint\ConfigServer.Infrastructure.dll

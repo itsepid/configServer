@@ -94,10 +94,15 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<TokenHelper>();
+builder.Services.AddScoped<ConfigHelper>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IConfigService, ConfigService>();
 builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
+builder.Services.AddScoped<IConfService, ConfService>();
+builder.Services.AddScoped<IConfRepository, ConfRepository>();
+
+
 
 var app = builder.Build();
 

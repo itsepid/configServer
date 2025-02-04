@@ -14,7 +14,7 @@ namespace ConfigServer.Infrastructure.Services
         {
             _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
 
-            // Ensure the uploads directory exists
+          
             if (!Directory.Exists(_uploadsFolder))
             {
                 Directory.CreateDirectory(_uploadsFolder);
@@ -27,27 +27,25 @@ namespace ConfigServer.Infrastructure.Services
                 throw new ArgumentException("File cannot be null or empty.");
             }
 
-            // Generate unique file name
+            
             string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             string filePath = Path.Combine(_uploadsFolder, fileName);
 
-            // Save the file
+           
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
-            // Construct base URL from the request
+           
             string baseUrl = $"{request.Scheme}://{request.Host}";
             string fileUrl = $"{baseUrl}/uploads/{fileName}";
 
             return (filePath, fileUrl);
         }
 
-        /// <summary>
-        /// Deletes a file from the uploads folder.
-        /// </summary>
-        /// <param name="filePath">The path of the file to delete.</param>
+        
+    
         public void DeleteFile(string filePath)
         {
             if (File.Exists(filePath))

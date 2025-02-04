@@ -50,7 +50,7 @@ namespace ConfigServer.Infrastructure.Services
             await _configRepository.AddAsync(config);
             await _configRepository.SaveChangesAsync();
 
-            PublishConfigMessage(config);
+            PublishConfigMessage(config, "create");
 
             return config;
         
@@ -69,6 +69,7 @@ namespace ConfigServer.Infrastructure.Services
 
            await _configRepository.DeleteAsync(id);
            await _configRepository.SaveChangesAsync();
+           PublishDeleteMessage(config);
         }
 public async Task UpdateConfigAsync(Guid configId, UpdateConfigDTO updatedConfig, string userRole)
 {
@@ -122,7 +123,7 @@ public async Task UpdateConfigAsync(Guid configId, UpdateConfigDTO updatedConfig
         await _configRepository.SaveChangesAsync();
         Console.WriteLine($"UpdatedAt after save: {existingConfig.UpdatedAt}");
 
-        PublishConfigMessage(existingConfig);
+        PublishConfigMessage(existingConfig, "Update");
     }
     catch (Exception ex)
     {
@@ -154,40 +155,6 @@ private async Task<(string filePath, string fileUrl)> HandleFileReplacementAsync
 }
 
 
-
-
-// public async Task UpdateConfigAsync(Guid configId, UpdateConfigDTO updatedConfig)
-// {
-//     var existingConfig = await _configRepository.GetByIdAsync(configId);
-//     if (existingConfig == null)
-//     {
-//         throw new ArgumentException("Configuration not found.");
-//     }
-
-//     string filePath = existingConfig.FilePath;
-//     string fileUrl = existingConfig.FileUrl;
-
-//     // If a new file is provided, handle the replacement
-//     if (updatedConfig.File != null)
-//     {
-//         var (newFilePath, newFileUrl) = await HandleFileReplacementAsync(existingConfig, updatedConfig.File);
-//         filePath = newFilePath ?? filePath;
-//         fileUrl = newFileUrl ?? fileUrl;
-//     }
-
-//     // Update the config properties
-//     existingConfig.Key = updatedConfig.Key ?? existingConfig.Key;
-//     existingConfig.Value = updatedConfig.Value ?? existingConfig.Value;
-//     existingConfig.Description = updatedConfig.Description ?? existingConfig.Description;
-//     existingConfig.UpdatedAt = DateTime.UtcNow;
-//     existingConfig.FilePath = filePath;
-//     existingConfig.FileUrl = fileUrl;
-
-//     await _configRepository.UpdateAsync(existingConfig);
-//     await _configRepository.SaveChangesAsync();
-
-//     PublishConfigMessage(existingConfig);
-// }
         
 
         private void ValidateUserRole(string userRole)
@@ -209,28 +176,12 @@ private async Task<(string filePath, string fileUrl)> HandleFileReplacementAsync
             return await _fileService.UploadFileAsync(file, request);
         }
 
-        // private async Task<(string filePath, string fileUrl)> HandleFileReplacementAsync(Config existingConfig, IFormFile newFile)
-        // {
-        //     if (newFile == null)
-        //     {
-        //         return (null, null); // No file replacement
-        //     }
 
-        //     // Delete the old file if it exists
-        //     if (!string.IsNullOrEmpty(existingConfig.FilePath))
-        //     {
-        //         _fileService.DeleteFile(existingConfig.FilePath);
-        //     }
-
-        //     // Upload the new file
-        //     var request = _httpContextAccessor.HttpContext.Request;
-        //     return await _fileService.UploadFileAsync(newFile, request);
-        // }
-
-        private void PublishConfigMessage(Config config)
+        private void PublishConfigMessage(Config config, string action)
         {
-            var message = JsonSerializer.Serialize(new
+            var message =  (new
             {
+                Action = action,
                 ConfigId = config.Id,
                 ConfigProject = config.ProjectId,
                 ConfigFilePath = config.FilePath,
@@ -240,7 +191,22 @@ private async Task<(string filePath, string fileUrl)> HandleFileReplacementAsync
                 config.UpdatedAt
             });
 
-            _rabbitMQService.PublishMessage($"config.{config.ProjectId}.{config.Key}", message);
+                var messageBody = JsonSerializer.Serialize(message);
+
+            _rabbitMQService.PublishMessage($"config.{config.ProjectId}.{config.Key}", messageBody);
+        }
+
+        private void PublishDeleteMessage(Config config)
+        {
+
+            var message = JsonSerializer.Serialize (new
+            {
+                ConfigId = config.Id,
+                Action = "Deleted"
+            });
+
+             _rabbitMQService.PublishMessage($"config.{config.ProjectId}.{config.Key}", message);
+
         }
     }
 }

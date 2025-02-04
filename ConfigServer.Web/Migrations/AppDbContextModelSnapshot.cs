@@ -68,6 +68,60 @@ namespace ConfigServer.Web.Migrations
                     b.ToTable("Configs");
                 });
 
+            modelBuilder.Entity("ConfigServer.Domain.Entities.ConfigEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ConfigProjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigProjectId", "Key")
+                        .IsUnique();
+
+                    b.ToTable("ConfigEntries");
+                });
+
+            modelBuilder.Entity("ConfigServer.Domain.Entities.ConfigProject", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Environment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasskeyHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectName")
+                        .IsUnique();
+
+                    b.ToTable("ConfigProjects");
+                });
+
             modelBuilder.Entity("ConfigServer.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -101,6 +155,17 @@ namespace ConfigServer.Web.Migrations
                     b.HasOne("ConfigServer.Domain.Entities.User", null)
                         .WithMany("Configs")
                         .HasForeignKey("UserId1");
+                });
+
+            modelBuilder.Entity("ConfigServer.Domain.Entities.ConfigEntry", b =>
+                {
+                    b.HasOne("ConfigServer.Domain.Entities.ConfigProject", "ConfigProject")
+                        .WithMany()
+                        .HasForeignKey("ConfigProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ConfigProject");
                 });
 
             modelBuilder.Entity("ConfigServer.Domain.Entities.User", b =>
