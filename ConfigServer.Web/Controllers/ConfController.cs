@@ -19,14 +19,14 @@ namespace ConfigServer.Web.Controllers
             _configHelper = configHelper;
         }
 
-        // Create project
+        
         [HttpPost("create-project")]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
         {
             try
             {
-                await _configService.CreateProjectAsync(request.ProjectName, request.Passkey, request.Environment);
-                return Ok(new { Message = "Project created successfully." });
+                await _configService.CreateProjectAsync(request.ProjectName, request.Passkey);
+                return Ok(new { Message = "Project created successfully."  });
             }
             catch (InvalidOperationException ex)
             {
@@ -34,28 +34,28 @@ namespace ConfigServer.Web.Controllers
             }
         }
 
-        // Get project config
+        
      [HttpGet("get-config/{projectName}")]
-public async Task<IActionResult> GetProjectConfig(string projectName, [FromHeader] string passkey)
+public async Task<IActionResult> GetProjectConfig(string projectName, [FromHeader] string passkey, [FromHeader] string environment)
 {
-    // Validate the passkey.
+    
     bool isValid = await _configService.ValidatePasskeyAsync(projectName, passkey);
     if (!isValid)
     {
         return Unauthorized("Invalid passkey.");
     }
 
-    // Get the nested configuration object.
-    var config = await _configService.GetProjectConfigAsync(projectName);
+   
+    var config = await _configService.GetProjectConfigAsync(projectName, environment);
 
-    // Let ASP.NET Core handle serialization by returning the object directly.
+    
     return Ok(config);
 }
 
 
-        // Update project config
-        [HttpPost("update-config/{projectName}")]
-        public async Task<IActionResult> UpdateProjectConfig(string projectName, [FromBody] Dictionary<string, string> newConfig, [FromHeader] string passkey)
+        
+        [HttpPost("create-config/{projectName}")]
+        public async Task<IActionResult> CreateProjectConfig(string projectName, [FromBody] Dictionary<string, string> newConfig, [FromHeader] string passkey, [FromHeader] string environment)
         {
             var isValidPasskey = await _configService.ValidatePasskeyAsync(projectName, passkey);
 
@@ -64,25 +64,31 @@ public async Task<IActionResult> GetProjectConfig(string projectName, [FromHeade
                 return Unauthorized("Invalid passkey.");
             }
 
-            await _configService.CreateProjectConfigAsync(projectName, newConfig);
+            await _configService.CreateProjectConfigAsync(projectName, newConfig, environment);
 
             return Ok(new { Message = "Configuration updated successfully." });
         }
 
 
-            [HttpPut("{projectName}/configs")]
-        public async Task<IActionResult> UpdateProjectConfig(string projectName, [FromBody] Dictionary<string, string> updatedConfigs)
-        {
-            try
-            {
-                await _configService.UpdateProjectConfigAsync(projectName, updatedConfigs);
-                return Ok("Configurations updated successfully.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //     [HttpPut("{projectName}/configs")]
+        // public async Task<IActionResult> UpdateProjectConfig(string projectName, [FromBody] Dictionary<string, string> updatedConfigs,  [FromHeader] string passkey, [FromHeader] string environment)
+        // {
+        //     var isValidPasskey = await _configService.ValidatePasskeyAsync(projectName, passkey);
+
+        //     if (!isValidPasskey)
+        //     {
+        //         return Unauthorized("Invalid passkey.");
+        //     }
+        //     try
+        //     {
+        //         await _configService.UpdateProjectConfigAsync(projectName, updatedConfigs, environment);
+        //         return Ok("Configurations updated successfully.");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest(ex.Message);
+        //     }
+        // }
 
 
 }
@@ -96,7 +102,7 @@ public async Task<IActionResult> GetProjectConfig(string projectName, [FromHeade
         public string ProjectName { get; set; }
         public string Passkey { get; set; }
 
-        public string Environment { get; set; }
+      //  public string Environment { get; set; }
     }
 
     public class ConfigUpdateRequest

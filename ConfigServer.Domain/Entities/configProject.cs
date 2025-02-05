@@ -8,7 +8,7 @@ namespace ConfigServer.Domain.Entities
     {
         public Guid Id { get; private set; } 
         public string ProjectName { get; private set; } 
-        public string Environment { get; private set;}
+      //  public string Environment { get; private set;}
         public string PasskeyHash { get; private set; } 
         public DateTime LastUpdated { get; private set; }
 
@@ -16,11 +16,11 @@ namespace ConfigServer.Domain.Entities
 
         private ConfigProject() { } 
 
-        public ConfigProject(string projectName, string passkey, string environment)
+        public ConfigProject(string projectName, string passkey)
         {
             Id = Guid.NewGuid();
             ProjectName = projectName;
-            Environment = environment;
+          //  Environment = environment;
             PasskeyHash = HashPasskey(passkey);
             LastUpdated = DateTime.UtcNow;
         }

@@ -47,9 +47,9 @@ public void PublishMessage(string routingKey, string message)
     );
 }
 
-public async Task PublishConfigUpdateAsync(string projectName, Dictionary<string, string> newConfig)
+public async Task PublishConfigUpdateAsync(Guid projectId, string environment, Dictionary<string, string> newConfig)
 {
-    var routingKey = $"config.{projectName}";
+    var routingKey = $"config.{projectId}.{environment}";
 
     var message = JsonSerializer.Serialize(newConfig);
     var body = Encoding.UTF8.GetBytes(message);

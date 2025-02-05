@@ -1,139 +1,139 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using ConfigServer.Domain.Entities;
-using ConfigServer.Application.DTOs;
-using ConfigServer.Application.Interfaces;
-using ConfigServer.Infrastructure.Services;
+// using System;
+// using System.Collections.Generic;
+// using System.Threading.Tasks;
+// using Microsoft.AspNetCore.Mvc;
+// using ConfigServer.Domain.Entities;
+// using ConfigServer.Application.DTOs;
+// using ConfigServer.Application.Interfaces;
+// using ConfigServer.Infrastructure.Services;
 
-namespace ConfigServer.Web.Controllers
-{  
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ConfigController : ControllerBase
-    {
-        private readonly IConfigRepository _configRepository;
-        private readonly TokenHelper _tokenHelper;
-        private readonly IConfigService _configService;
+// namespace ConfigServer.Web.Controllers
+// {  
+//     [ApiController]
+//     [Route("api/[controller]")]
+//     public class ConfigController : ControllerBase
+//     {
+//         private readonly IConfigRepository _configRepository;
+//         private readonly TokenHelper _tokenHelper;
+//         private readonly IConfigService _configService;
         
-        public ConfigController(IConfigRepository configRepository, TokenHelper tokenHelper, IConfigService configService)
-        {
-            _configRepository = configRepository;
-            _tokenHelper = tokenHelper;
-            _configService = configService;
-        }
+//         public ConfigController(IConfigRepository configRepository, TokenHelper tokenHelper, IConfigService configService)
+//         {
+//             _configRepository = configRepository;
+//             _tokenHelper = tokenHelper;
+//             _configService = configService;
+//         }
 
         
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Config>>> GetAllConfigs()
-        {
-            var configs = await _configRepository.GetAllAsync();
-            return Ok(configs);
-        }
+//         [HttpGet]
+//         public async Task<ActionResult<IEnumerable<Config>>> GetAllConfigs()
+//         {
+//             var configs = await _configRepository.GetAllAsync();
+//             return Ok(configs);
+//         }
 
 
-        [HttpGet("{Project}")]
-        public async Task<ActionResult<Config>> GetConfigByProject(string Project)
-        {
-            var config = await _configRepository.GetByProjectAsync(Project);
-            if (config == null)
-            {
-                return NotFound(new { message = "Configuration not found." });
-            }
+//         [HttpGet("{Project}")]
+//         public async Task<ActionResult<Config>> GetConfigByProject(string Project)
+//         {
+//             var config = await _configRepository.GetByProjectAsync(Project);
+//             if (config == null)
+//             {
+//                 return NotFound(new { message = "Configuration not found." });
+//             }
 
-            return Ok(config);
-        }
+//             return Ok(config);
+//         }
 
     
 
-    [HttpPost]
-    public async Task<ActionResult> CreateConfig([FromForm] ConfigDTO configDto)
-    {
-        // Input validation
-        if (configDto == null || string.IsNullOrWhiteSpace(configDto.Key))
-        {
-            return BadRequest(new { message = "Key is required." });
-        }
+//     [HttpPost]
+//     public async Task<ActionResult> CreateConfig([FromForm] ConfigDTO configDto)
+//     {
+//         // Input validation
+//         if (configDto == null || string.IsNullOrWhiteSpace(configDto.Key))
+//         {
+//             return BadRequest(new { message = "Key is required." });
+//         }
 
-        if (string.IsNullOrWhiteSpace(configDto.Value) && 
-            (configDto.File == null || configDto.File.Length == 0))
-        {
-            return BadRequest(new { message = "Provide either Value or a File." });
-        }
+//         if (string.IsNullOrWhiteSpace(configDto.Value) && 
+//             (configDto.File == null || configDto.File.Length == 0))
+//         {
+//             return BadRequest(new { message = "Provide either Value or a File." });
+//         }
 
-        try
-        {
+//         try
+//         {
            
-            var (userId, userRole) = _tokenHelper.GetUserFromCookie();
+//             var (userId, userRole) = _tokenHelper.GetUserFromCookie();
 
            
-            var config = await _configService.CreateConfigAsync(configDto, userId, userRole);
+//             var config = await _configService.CreateConfigAsync(configDto, userId, userRole);
 
-            return Ok(config);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { message = $"An error occurred: {ex.Message}" });
-        }
-    }
+//             return Ok(config);
+//         }
+//         catch (UnauthorizedAccessException ex)
+//         {
+//             return Unauthorized(new { message = ex.Message });
+//         }
+//         catch (Exception ex)
+//         {
+//             return BadRequest(new { message = $"An error occurred: {ex.Message}" });
+//         }
+//     }
 
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateConfig(Guid id, [FromForm] UpdateConfigDTO updatedConfig)
-        {
-            var (userId, userRole) = _tokenHelper.GetUserFromCookie();
+//     [HttpPut("{id}")]
+//     public async Task<ActionResult> UpdateConfig(Guid id, [FromForm] UpdateConfigDTO updatedConfig)
+//         {
+//             var (userId, userRole) = _tokenHelper.GetUserFromCookie();
 
-            Console.WriteLine($"Updating config with ID: {id}");
-            Console.WriteLine($"Key: {updatedConfig.Key}, Value: {updatedConfig.Value}, Description: {updatedConfig.Description}");
-            Console.WriteLine($"File provided: {updatedConfig.File != null}");
+//             Console.WriteLine($"Updating config with ID: {id}");
+//             Console.WriteLine($"Key: {updatedConfig.Key}, Value: {updatedConfig.Value}, Description: {updatedConfig.Description}");
+//             Console.WriteLine($"File provided: {updatedConfig.File != null}");
 
-            try
-            {
-                await _configService.UpdateConfigAsync(id, updatedConfig, userRole);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = $"An error occurred: {ex.Message}" });
-            }
-        }
+//             try
+//             {
+//                 await _configService.UpdateConfigAsync(id, updatedConfig, userRole);
+//                 return NoContent();
+//             }
+//             catch (ArgumentException ex)
+//             {
+//                 return NotFound(new { message = ex.Message });
+//             }
+//             catch (UnauthorizedAccessException ex)
+//             {
+//                 return Unauthorized(new { message = ex.Message });
+//             }
+//             catch (Exception ex)
+//             {
+//                 return BadRequest(new { message = $"An error occurred: {ex.Message}" });
+//             }
+//         }
 
-    [HttpDelete("{id}")]
+//     [HttpDelete("{id}")]
 
-    public async Task<ActionResult> DeleteConfig(Guid id)
-        {
-            var (userId, userRole) = _tokenHelper.GetUserFromCookie();
-            try
-            {
-                await _configService.DeleteConfigAsync(id, userRole);
-                return Ok(new { message = "config deleted" });    
-            }
-                catch (ArgumentException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = $"An error occurred: {ex.Message}" });
-            }
-        }
+//     public async Task<ActionResult> DeleteConfig(Guid id)
+//         {
+//             var (userId, userRole) = _tokenHelper.GetUserFromCookie();
+//             try
+//             {
+//                 await _configService.DeleteConfigAsync(id, userRole);
+//                 return Ok(new { message = "config deleted" });    
+//             }
+//                 catch (ArgumentException ex)
+//             {
+//                 return NotFound(new { message = ex.Message });
+//             }
+//             catch (UnauthorizedAccessException ex)
+//             {
+//                 return Unauthorized(new { message = ex.Message });
+//             }
+//             catch (Exception ex)
+//             {
+//                 return BadRequest(new { message = $"An error occurred: {ex.Message}" });
+//             }
+//         }
 
-            }
-        }
+//             }
+//         }

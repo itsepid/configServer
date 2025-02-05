@@ -6,7 +6,7 @@ public class AppDbContext : DbContext
 {
     public DbSet<User> Users { get; set; } 
 
-    public DbSet<Config> Configs { get; set;}
+    //public DbSet<Config> Configs { get; set;}
 
     public DbSet<ConfigProject> ConfigProjects { get; set; } 
         public DbSet<ConfigEntry> ConfigEntries { get; set; }
@@ -16,11 +16,11 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-    modelBuilder.Entity<Config>()
-        .HasOne<User>() 
-        .WithMany() 
-        .HasForeignKey(c => c.UserId) 
-        .OnDelete(DeleteBehavior.Cascade);
+    // modelBuilder.Entity<Config>()
+    //     .HasOne<User>() 
+    //     .WithMany() 
+    //     .HasForeignKey(c => c.UserId) 
+    //     .OnDelete(DeleteBehavior.Cascade);
 
     modelBuilder.Entity<ConfigProject>()
                 .HasIndex(p => p.ProjectName)
@@ -28,7 +28,7 @@ public class AppDbContext : DbContext
 
             
             modelBuilder.Entity<ConfigEntry>()
-                .HasIndex(c => new { c.ConfigProjectId, c.Key })
+                .HasIndex(c => new { c.ConfigProjectId, c.Key, c.Environment })
                 .IsUnique(); 
     
     }

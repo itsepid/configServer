@@ -6,7 +6,7 @@ namespace ConfigServer.Domain.Entities
         public string Username { get; set; }
         public string Password { get; set; }
         public string Roles { get; set;}
-        public ICollection<Config> Configs { get; set; } = new List<Config>();
+      //  public ICollection<Config> Configs { get; set; } = new List<Config>();
 
       
         public User(string username, string password, string roles)

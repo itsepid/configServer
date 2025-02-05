@@ -37,39 +37,40 @@ namespace ConfigServer.Infrastructure.Services
         //     return await _confRepository.GetProjectConfigAsync(project.Id);
         // }
 
-public async Task<Dictionary<string, object>> GetProjectConfigAsync(string projectName)
+public async Task<Dictionary<string, object>> GetProjectConfigAsync(string projectName, string environment)
 {
-    // Retrieve the project based on the project name.
+    
     var project = await _confRepository.GetProjectByNameAsync(projectName);
     if (project == null)
     {
         throw new Exception("Project not found");
     }
 
-    // Retrieve all configuration entries for the project.
-    var entries = await _confRepository.GetProjectConfigAsync(project.Id);
+    
+    var entries = await _confRepository.GetProjectConfigAsync(project.Id, environment);
 
-    // Use the ConfigHelper to build the nested configuration object.
+   
     var configObject = _configHelper.BuildConfig(entries);
+    Console.WriteLine($"{project.Id}");
 
     return configObject;
 }
 
 
 
-        public async Task CreateProjectConfigAsync(string projectName, Dictionary<string, string> newConfig)
+        public async Task CreateProjectConfigAsync(string projectName, Dictionary<string, string> newConfig, string environment)
         {
             var project = await _confRepository.GetProjectByNameAsync(projectName);
 
             if (project == null) return;
 
-            await _confRepository.UpdateProjectConfigAsync(project.Id, newConfig);
+            await _confRepository.UpdateProjectConfigAsync(project.Id, newConfig, environment);
 
             
         }
 
 
-        public async Task UpdateProjectConfigAsync(string projectName, Dictionary<string, string> newConfig)
+        public async Task UpdateProjectConfigAsync(string projectName, Dictionary<string, string> newConfig, string environment)
         {
             var project = await _confRepository.GetProjectByNameAsync(projectName);
             if (project == null)
@@ -77,19 +78,20 @@ public async Task<Dictionary<string, object>> GetProjectConfigAsync(string proje
                 throw new Exception("Project not found");
             }
 
-            await _confRepository.UpdateProjectConfigAsync(project.Id, newConfig);
+            await _confRepository.UpdateProjectConfigAsync(project.Id, newConfig, environment);
 
-            // Optionally, notify other systems about the update
-            await _rabbitMQService.PublishConfigUpdateAsync(projectName, newConfig);
+            
+            
             Console.WriteLine($"message is published for{projectName}");
         }
 
-        public async Task CreateProjectAsync(string projectName, string passkey, string environment)
+        public async Task CreateProjectAsync(string projectName, string passkey)
         {
             var existingProject = await _confRepository.GetProjectByNameAsync(projectName);
             if (existingProject != null) throw new InvalidOperationException("Project already exists.");
-            var project = new ConfigProject(projectName, passkey, environment);
+            var project = new ConfigProject(projectName, passkey);
             await _confRepository.CreateProjectAsync(project);
+            Console.WriteLine($"{project}");
         } 
 
     }
